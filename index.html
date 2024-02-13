@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App de Tareas</title>
+    <link rel="icon" href="icon/lista.png">
+    <title>Todo List</title>
 </head>
 <body>
     <main class="general-container">
-        <h1 class="main-title">App de Tareas</h1>
+        <h1 class="main-title">Tareas</h1>
 
         <section class="new-task">
             <h2 class="title-new-ask">Nueva Tarea</h2>
@@ -21,6 +22,8 @@
                 <option value="status-en-proceso">En proceso</option>
                 <option value="status-terminada">Terminada</option>
             </select>
+
+            <button type="button">Agregar</button>
         </section>
 
         <section class="filters">
@@ -42,7 +45,23 @@
             </select>
         </section>
 
-        <section class="tasks"></section>
+        <section class="tasks">
+            <section class="task">
+                <div>
+                    <h4>Hoy</h4>
+                    <img src="icon/cerrar.png" alt="Eliminar">
+                </div>
+                <div>
+                    <p class="texto-descriptivo">JAJAJAJAJJAJJAJJAJAJAJAJJ</p>
+                    <label for="estado-de-tarea">Estado:</label>
+                    <select name="estado-de-tarea" id="estado-de-tarea">
+                        <option value="estado-por-empezar">Por empezar</option>
+                        <option value="estado-en-proceso">En proceso</option>
+                        <option value="estado-terminada">Terminada</option>
+                    </select>
+                </div>
+            </section>
+        </section>
     </main>
 </body>
 </html>
