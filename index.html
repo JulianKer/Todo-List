@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App de Tareas</title>
+</head>
+<body>
+    <main class="general-container">
+        <h1 class="main-title">App de Tareas</h1>
+
+        <section class="new-task">
+            <h2 class="title-new-ask">Nueva Tarea</h2>
+
+            <label for="description">Descripción:</label>
+            <input type="text" id="description">
+
+            <label for="status">Estado:</label>
+            <select name="status" id="status">
+                <option value="status-por-empezar">Por empezar</option>
+                <option value="status-en-proceso">En proceso</option>
+                <option value="status-terminada">Terminada</option>
+            </select>
+        </section>
+
+        <section class="filters">
+            <h2 class="title-filters">Filtros</h2>
+
+            <label for="selector-filtro-estados">Filtrar por estado:</label>
+            <select name="selector-filtro-estados" id="selector-filtro-estados">
+                <option value="filtro-todas">Todas</option>
+                <option value="filtro-por-empezar">Por empezar</option>
+                <option value="filtro-en-proceso">En proceso</option>
+                <option value="filtro-terminadas">Terminadas</option>
+            </select>
+
+            <label for="selector-fecha">Ordenar por agregado:</label>
+            <select name="selector-fecha" id="selector-fecha">
+                <option value="ordenar-todas">Todas</option>
+                <option value="ordenar-recientemente">Recientemente</option>
+                <option value="ordenar-antiguamente">Antiguamente</option>
+            </select>
+        </section>
+
+        <section class="tasks"></section>
+    </main>
+</body>
+</html>
