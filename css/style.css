@@ -1,0 +1,37 @@
+@font-face{
+    font-family: 'roboto-black';
+    src: url(../font/Roboto-Black.ttf);
+}
+
+@font-face{
+    font-family: 'roboto-bold';
+    src: url(../font/Roboto-Bold.ttf);
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'roboto-black';
+    background-color: black;
+    color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.general-container{
+    border: red solid 2px;
+    background-color: rgb(38, 38, 38);
+    width: 1000px;
+}
+
+img{
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
