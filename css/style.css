@@ -28,6 +28,31 @@ body{
     border: red solid 2px;
     background-color: rgb(38, 38, 38);
     width: 1000px;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-title{
+    padding: 20px;
+}
+
+.new-task{
+    background-color: rgb(50, 50, 50);
+    width: 90%;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.container-estados,
+.container-description{
+    display: flex;
+}
+label{
+    display: flex;
+    align-self: center;
 }
 
 img{

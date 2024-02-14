@@ -14,15 +14,19 @@
         <section class="new-task">
             <h2 class="title-new-ask">Nueva Tarea</h2>
 
-            <label for="description">Descripción:</label>
-            <input type="text" id="description">
-
-            <label for="status">Estado:</label>
-            <select name="status" id="status">
-                <option value="status-por-empezar">Por empezar</option>
-                <option value="status-en-proceso">En proceso</option>
-                <option value="status-terminada">Terminada</option>
-            </select>
+            <div class="container-description">
+                <label for="description">Descripción:</label>
+                <input type="text" id="description">
+            </div>
+            
+            <div class="container-estados">
+                <label for="status">Estado:</label>
+                <select name="status" id="status">
+                    <option value="status-por-empezar">Por empezar</option>
+                    <option value="status-en-proceso">En proceso</option>
+                    <option value="status-terminada">Terminada</option>
+                </select>
+            </div>
 
             <button type="button">Agregar</button>
         </section>
