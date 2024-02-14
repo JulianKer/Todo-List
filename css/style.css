@@ -48,6 +48,18 @@ body{
     justify-content: space-between;
 }
 
+.title-new-ask{
+    grid-area: title;
+}
+
+#container-description{
+    grid-area: container-description;
+}
+
+#container-estados{
+    grid-area: container-estados;
+}
+
 .new-task{
     margin-bottom: 20px;
 }
@@ -77,6 +89,7 @@ label{
     border-radius: 3px;
     border: rgb(70, 70, 70) solid 2px;
     background-color: rgb(50, 50, 50);
+    cursor: pointer;
 }
 
 #description{
@@ -101,8 +114,13 @@ label{
     border: solid 2px rgb(120, 120, 120);
 }
 
+#selector-fecha{
+    max-height: 35px;
+}
+
 
 button{
+    grid-area: button;
     color: white;
     font-size: 1em;
     background-color: rgb(70, 70, 70);
@@ -129,6 +147,7 @@ button:active{
 
 .task{
     border: solid 1px rgb(70, 70, 70);
+    border-radius: 5px;
     width: 100%;
     height: 90px;
     padding: 15px;
@@ -136,6 +155,13 @@ button:active{
     display: flex;
     flex-direction: column;
     position: relative;
+    transition: all .5s;
+}
+
+.task:hover{
+    background-color: rgb(50, 50, 50);
+    border: yellow solid 1px;
+    transform: scale(1.05);
 }
 
 .first-row,
@@ -180,4 +206,60 @@ img{
     width: 15px;
     height: 15px;
     cursor: pointer;
+}
+
+@media only screen and (max-width: 900px) {
+    body{
+        background-color: rgb(38, 38, 38);
+    }
+
+    .general-container{
+        min-width: 100%;
+        min-height: 100%;
+        width: 100%;
+        border-radius: 0;
+    }
+
+    .new-task{
+        display: grid;
+        row-gap: 20px;
+    }
+    
+    .new-task{
+        grid-template-areas:"title title"
+        "container-description container-estados"
+        "button button";
+    }
+    
+    .filters{
+        flex-direction: column;
+        row-gap: 20px;
+    }
+
+    .title-new-ask{
+        text-align: center;
+    }
+
+    .title-filters{
+        grid-area: title-filter;
+        text-align: center;
+    }
+
+    .container-estados{
+        justify-self: start;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .new-task{
+        display: flex;
+        flex-direction: column;
+    }
+    #description{
+        width: 70%;
+        min-width: 125px;
+    }
+    #status{
+        margin-left: 45px;
+    }
 }
