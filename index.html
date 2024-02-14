@@ -18,7 +18,6 @@
                 <label for="description">Descripción:</label>
                 <input type="text" id="description">
             </div>
-            
             <div class="container-estados">
                 <label for="status">Estado:</label>
                 <select name="status" id="status">
@@ -34,23 +33,27 @@
         <section class="filters">
             <h2 class="title-filters">Filtros</h2>
 
-            <label for="selector-filtro-estados">Filtrar por estado:</label>
-            <select name="selector-filtro-estados" id="selector-filtro-estados">
-                <option value="filtro-todas">Todas</option>
-                <option value="filtro-por-empezar">Por empezar</option>
-                <option value="filtro-en-proceso">En proceso</option>
-                <option value="filtro-terminadas">Terminadas</option>
-            </select>
+            <div class="container-filters">
+                <label for="selector-filtro-estados">Filtrar por estado:</label>
+                <select name="selector-filtro-estados" id="selector-filtro-estados">
+                    <option value="filtro-todas">Todas</option>
+                    <option value="filtro-por-empezar">Por empezar</option>
+                    <option value="filtro-en-proceso">En proceso</option>
+                    <option value="filtro-terminadas">Terminadas</option>
+                </select>
+            </div>
 
-            <label for="selector-fecha">Ordenar por agregado:</label>
-            <select name="selector-fecha" id="selector-fecha">
-                <option value="ordenar-todas">Todas</option>
-                <option value="ordenar-recientemente">Recientemente</option>
-                <option value="ordenar-antiguamente">Antiguamente</option>
-            </select>
+            <div class="container-fecha">
+                <label for="selector-fecha">Ordenar por agregado:</label>
+                <select name="selector-fecha" id="selector-fecha">
+                    <option value="ordenar-todas">Todas</option>
+                    <option value="ordenar-recientemente">Recientemente</option>
+                    <option value="ordenar-antiguamente">Antiguamente</option>
+                </select>
+            </div>
         </section>
 
-        <section class="tasks">
+        <section class="all-tasks">
             <section class="task">
                 <div>
                     <h4>Hoy</h4>

@@ -25,10 +25,10 @@ body{
 }
 
 .general-container{
-    border: red solid 2px;
     background-color: rgb(38, 38, 38);
     width: 1000px;
     height: 90vh;
+    border-radius: 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -38,22 +38,89 @@ body{
     padding: 20px;
 }
 
-.new-task{
+.new-task,
+.filters{
     background-color: rgb(50, 50, 50);
     width: 90%;
     padding: 20px;
+    border-radius: 5px;
     display: flex;
     justify-content: space-between;
 }
 
+.new-task{
+    margin: 20px;
+}
+
 .container-estados,
-.container-description{
+.container-description,
+.container-filters,
+.container-fecha{
     display: flex;
 }
+
+
 label{
+    color: rgb(216, 216, 216);
     display: flex;
     align-self: center;
 }
+
+#description,
+#status,
+#selector-filtro-estados,
+#selector-fecha{
+    color: rgb(216, 216, 216);
+
+    margin-left: 10px;
+    border-radius: 3px;
+    border: rgb(70, 70, 70) solid 2px;
+    background-color: rgb(50, 50, 50);
+}
+
+#description{
+    font-size: 1em;
+    padding: 3px;
+}
+
+#status,
+#selector-filtro-estados,
+#selector-fecha{
+    font-size: 1em;
+    padding: 5px;
+}
+
+#description:focus,
+#status:focus,
+#selector-filtro-estados:focus,
+#selector-fecha:focus{
+    outline: none;
+    border: solid 2px rgb(120, 120, 120);
+}
+
+
+button{
+    color: white;
+    font-size: 1em;
+    background-color: rgb(70, 70, 70);
+    border: white solid 1px;
+    padding: 5px 25px;
+}
+
+button:hover{
+    cursor: pointer;
+    border: rgb(0, 255, 0) solid 1px;
+}
+
+button:active{
+    color: rgb(0, 255, 0);
+    background-color: rgb(100, 100, 100);
+}
+
+
+
+
+
 
 img{
     width: 15px;
