@@ -32,6 +32,7 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
 }
 
 .main-title{
@@ -46,6 +47,12 @@ body{
     border-radius: 5px;
     display: flex;
     justify-content: space-between;
+}
+
+.new-task,
+.filters,
+.task{
+    min-width: 293px;
 }
 
 .title-new-ask{
@@ -89,12 +96,19 @@ label{
     border-radius: 3px;
     border: rgb(70, 70, 70) solid 2px;
     background-color: rgb(50, 50, 50);
+}
+
+#status,
+#selector-filtro-estados,
+#selector-fecha,
+#estado-de-tarea{
     cursor: pointer;
 }
 
 #description{
     font-size: 1em;
     padding: 3px;
+    caret-color: yellow;
 }
 
 #status,
@@ -171,7 +185,7 @@ button:active{
 }
 
 h4,
-img,
+.img-cruz,
 .texto-descriptivo,
 .selector-estado-de-tarea{
     position: absolute;
@@ -183,9 +197,12 @@ h4{
     font-size: 1.2em;
 }
 
-img{
+.img-cruz{
     top: 15px;
     right: 20px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
 }
 
 .texto-descriptivo{
@@ -202,11 +219,22 @@ img{
     bottom: 15px;
 }
 
-img{
-    width: 15px;
-    height: 15px;
-    cursor: pointer;
+/*---- warning-o-tasks ------*/
+
+.warning-o-tasks{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 15px;
 }
+
+.img-finger{
+    width: 40px;
+    height: 40px;
+}
+
+
+/* ---------------------------- */
 
 @media only screen and (max-width: 900px) {
     body{
@@ -314,7 +342,7 @@ img{
         left: 22.5%;
     }
 
-    img{
+    .img-cruz{
         width: 20px;
         height: 20px;
     }
