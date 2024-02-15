@@ -1,4 +1,4 @@
-let mensajeWarning =  `<section class="warning-no-tasks">
+let mensajeWarning =  `<section class="warning-no-tasks" id="warning-no-tasks">
                     <img src="icon/fingerUp.svg" alt="finger-up" class="img-finger">
                     <h3 class="title-warning">¡No hay tareas pendientes!</h3>
                 </section>`
@@ -23,7 +23,9 @@ let id = 0;
 
 boton.addEventListener("click", ()=>{
     
-    if (inputDescripcion.value != "") {
+    if (inputDescripcion.value === "" || inputDescripcion.value === " ") {
+        inputDescripcion.focus();
+    }else{
         eliminarWarning();
 
         let descripcion = inputDescripcion.value;
@@ -115,6 +117,7 @@ boton.addEventListener("click", ()=>{
                 }
         inputDescripcion.value = "";
         inputDescripcion.focus()
+
         arrayDeTasks.forEach(element => {
             console.log(element.id)
         });
@@ -137,6 +140,11 @@ boton.addEventListener("click", ()=>{
                             contenedorAllTask.removeChild(taskAEliminar); // lo remuevo del html
                             let indexAEliminar = arrayDeTasks.findIndex(element => element.id === idDelElemento) // busco el index del elemento q quiero eliminar
                             arrayDeTasks.splice(indexAEliminar,1) // lo elimino del array
+
+                            console.log("tamanio del array: " + arrayDeTasks.length)
+                            if (arrayDeTasks.length === 0) {
+                                mostrarWarning();
+                            }
 
                             // las task se eliminan correctamente pero ver mejor cuando se le aplica el id, que SIEMPRE sea NO del lenght sino del 
                             // ultimo elemento mas 1 pq asi no se repiten nunca, osea tratar de que si tengo 10 elemntos, no hacer el
@@ -191,6 +199,11 @@ function obtenerSiguienteId() {
 function eliminarWarning(){
     let sectionWarning = document.getElementById("warning-no-tasks");
     if (sectionWarning) {
+        console.log(sectionWarning)
         contenedorAllTask.removeChild(sectionWarning);
     }
+}
+
+function mostrarWarning() {
+    contenedorAllTask.innerHTML += mensajeWarning;
 }
