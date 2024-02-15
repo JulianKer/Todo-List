@@ -221,7 +221,7 @@ h4{
 
 /*---- warning-o-tasks ------*/
 
-.warning-o-tasks{
+.warning-no-tasks{
     display: flex;
     flex-direction: column;
     align-items: center;
