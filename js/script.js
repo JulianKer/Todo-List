@@ -1,21 +1,3 @@
-let task = `<section class="task">
-                <div class="first-row">
-                    <h4>Hoy</h4>
-                    <img src="icon/cerrar.png" alt="Eliminar" title="Eliminar" class="img-cruz">
-                </div>
-                <div class="second-row">
-                    <p class="texto-descriptivo">JAJAJAJAJJAJJAJJAJAJAJAJJJAJAJAJAJJAJJAJJAJAJAJAJJJAJAJAJAJJAJJAJJAJAJAJAJJ</p>
-                    <div class="selector-estado-de-tarea">
-                        <label for="estado-de-tarea">Estado:</label>
-                        <select name="estado-de-tarea" id="estado-de-tarea">
-                            <option value="estado-por-empezar">Por empezar</option>
-                            <option value="estado-en-proceso">En proceso</option>
-                            <option value="estado-terminada">Terminada</option>
-                        </select>
-                    </div>
-                </div>
-            </section>`;
-
 let mensajeWarning =  `<section class="warning-no-tasks">
                     <img src="icon/fingerUp.svg" alt="finger-up" class="img-finger">
                     <h3 class="title-warning">¡No hay tareas pendientes!</h3>
@@ -34,14 +16,13 @@ let selectFecha = document.getElementById("selector-fecha");
 // all task --------------------------
 let contenedorAllTask = document.getElementById("all-task");
 let arrayDeTasks = [];
-let botonEliminarTask;
-console.log(botonEliminarTask);
+let botonesEliminarTask;
 //------------------------------------
 
 boton.addEventListener("click", ()=>{
-    eliminarWarning();
     
     if (inputDescripcion.value != "") {
+        eliminarWarning();
         let descripcion = inputDescripcion.value;
         let estado = selectEstadoNuevaTask.value;
         let nuevaTarea;
@@ -130,7 +111,64 @@ boton.addEventListener("click", ()=>{
                 }
         inputDescripcion.value = "";
         inputDescripcion.focus()
-        botonEliminarTask = document.querySelector(".img-cruz")
+        botonesEliminarTask = document.querySelectorAll(".img-cruz")
+
+        botonesEliminarTask.forEach(element => {
+
+            element.addEventListener("click", ()=>{
+
+                let idDelElemento = element.id;
+
+                arrayDeTasks.forEach(task=>{
+
+                    if (task.id === idDelElemento) {
+                        let taskAEliminar = document.getElementById(idDelElemento);
+
+                        if (taskAEliminar != null) {
+                            contenedorAllTask.removeChild(taskAEliminar); // lo remuevo del html
+                            let indexAEliminar = arrayDeTasks.findIndex(element => element.id === idDelElemento) // busco el index del elemento q quiero eliminar
+                            arrayDeTasks.splice(indexAEliminar,1) // lo elimino del array
+
+                            // las task se eliminan correctamente pero ver mejor cuando se le aplica el id, que SIEMPRE sea NO del lenght sino del 
+                            // ultimo elemento mas 1 pq asi no se repiten nunca, osea tratar de que si tengo 10 elemntos, no hacer el
+                            // lenght mas 1 sino buscar cual es el ultimo y ai sumar uno pq capa el ultimo es de id 5 pero esta solo ese elemento
+                            // entonces desp se va a repetir
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        }
+                    }
+                })
+            })
+        });
     }
 })
 

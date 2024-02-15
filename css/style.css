@@ -10,7 +10,7 @@
 
 ::selection{
     color: rgb(255, 255, 0);
-    background-color: rgb(18, 18, 18);
+    background-color: transparent;
 }
 
 *{
