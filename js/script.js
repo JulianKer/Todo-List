@@ -19,17 +19,21 @@ let arrayDeTasks = [];
 let botonesEliminarTask;
 //------------------------------------
 
+let id = 0;
+
 boton.addEventListener("click", ()=>{
     
     if (inputDescripcion.value != "") {
         eliminarWarning();
+
         let descripcion = inputDescripcion.value;
         let estado = selectEstadoNuevaTask.value;
         let nuevaTarea;
+
         switch (selectEstadoNuevaTask.value) {
             case "status-por-empezar":
                 nuevaTarea = {
-                    id: "tarea-" + (arrayDeTasks.length+1),
+                    id: "tarea-" + obtenerSiguienteId(),
                     descripcion: descripcion,
                     estado: estado
                 };
@@ -111,6 +115,11 @@ boton.addEventListener("click", ()=>{
                 }
         inputDescripcion.value = "";
         inputDescripcion.focus()
+        arrayDeTasks.forEach(element => {
+            console.log(element.id)
+        });
+        console.log("......")
+
         botonesEliminarTask = document.querySelectorAll(".img-cruz")
 
         botonesEliminarTask.forEach(element => {
@@ -132,7 +141,9 @@ boton.addEventListener("click", ()=>{
                             // las task se eliminan correctamente pero ver mejor cuando se le aplica el id, que SIEMPRE sea NO del lenght sino del 
                             // ultimo elemento mas 1 pq asi no se repiten nunca, osea tratar de que si tengo 10 elemntos, no hacer el
                             // lenght mas 1 sino buscar cual es el ultimo y ai sumar uno pq capa el ultimo es de id 5 pero esta solo ese elemento
-                            // entonces desp se va a repetir
+                            // entonces desp se va a repetir LO HICE EN UN METODO MAS ABAJO, MIRAR
+
+                            // SINO LO PODRIA DEJAR ASI QUE YA SE MUESTRA PERO BUENO CAPAZ DESPUES SE ME COMPLICA A LA HORA DE ORDENARLOS Y ESO
 
 
 
@@ -171,6 +182,11 @@ boton.addEventListener("click", ()=>{
         });
     }
 })
+
+function obtenerSiguienteId() {
+    return (++id);
+}
+
 
 function eliminarWarning(){
     let sectionWarning = document.getElementById("warning-no-tasks");

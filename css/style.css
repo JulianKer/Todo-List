@@ -73,8 +73,23 @@ span{
     border-radius: 5px;
     display: flex;
     justify-content: space-between;
+    border-image: linear-gradient(to right, yellow, rgb(50,50,50),rgb(50,50,50),rgb(50,50,50),rgb(50,50,50));
+    border-image-slice: 1;
+    border-style: solid;
+    border-width: 2px;
+
+    transition: all .3s;
 }
 
+.new-task:hover,
+.filters:hover{
+    border-image: linear-gradient(to top, yellow, rgb(50,50,50));
+    border-image-slice: 1;
+    border-style: solid;
+    border-width: 2px;
+    transition: all .3s;
+}
+ 
 .new-task,
 .filters,
 .task{
