@@ -46,6 +46,63 @@ boton.addEventListener("click", ()=>{
 })
 
 
+// NOTA PARA EL JULIAN QUE SIGA MAÑANA ------------------------------>
+
+selectFiltroPorEstados.addEventListener("change", ()=>{  // el filtro se hace todo bien pero tengo que tener en cuenta: cuando esten filtradas, eliminarlas del array original
+    // tambien debo eliminarlas del array q se esta mostrando asi se borra del html cunaod esta el filtro, tambien tengo que tener en cuenta de que el selector de la
+    // propia task, si estoy por ejemplo filtrando por empezar, al cambiar el selector de la task se debe borrar de donde se esta mostrando porque ya tiene otro estado
+    // entonces si la cambio a en proceso, deberia verse ahora en el filtro de en proceso, y bueno, faltaria lo de el otro filtro que es el mas reciente
+    // tambien ver como hacer para que si filtro por empezar y no hay tareas por empezar pero si que hay de las otras, que se muestre el mensaje de wanring y asi con todas
+
+    let arrayFiltrado = [];
+    let estadoDelSelector = selectFiltroPorEstados.value;
+
+    let estadoFiltroTodas = "filtro-todas";
+    let estadoFiltroPorEmpezar = "filtro-por-empezar";
+    let estadoFiltroEnProceso = "filtro-en-proceso";
+    let estadoFiltroTerminadas = "filtro-terminadas";
+
+    let statusPorEmpezar = "status-por-empezar";
+    let statusEnProceso = "status-en-proceso";
+    let statusTerminada = "status-terminada";
+
+    if (arrayDeTasks.length != 0) {
+        switch (estadoDelSelector) {
+            case estadoFiltroTodas:
+                mostrarArray(arrayDeTasks);
+                break;
+    
+            case estadoFiltroPorEmpezar:
+                arrayFiltrado = arrayDeTasks.filter(task => {
+                    return task.estado === statusPorEmpezar;
+                })
+                mostrarArray(arrayFiltrado);
+                break;
+    
+            case estadoFiltroEnProceso:
+                arrayFiltrado = arrayDeTasks.filter(task => {
+                    return task.estado === statusEnProceso;
+                })
+                mostrarArray(arrayFiltrado);
+                break;
+    
+            case estadoFiltroTerminadas:
+                arrayFiltrado = arrayDeTasks.filter(task => {
+                    console.log(task.estado)
+                    console.log(statusTerminada)
+                    console.log(task.estado === statusTerminada)
+                    return task.estado === statusTerminada;
+                })
+                mostrarArray(arrayFiltrado);
+                break;
+        }
+    }
+
+
+    //console.log( "array de task" + arrayDeTasks)
+    //console.log("array filtrado" + arrayFiltrado)
+})
+
 
 
 // ---------------------- FUNCIONES ------------------------------
@@ -145,6 +202,8 @@ function mostrarArray(arrayRecibido) {
         })
     });
 }
+
+
 
 function obtenerSiguienteId() {
     return (++id);
