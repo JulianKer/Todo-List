@@ -19,6 +19,13 @@ let arrayDeTasks = [];
 let botonesEliminarTask;
 //------------------------------------
 
+// task -----------------------------
+let selectoresTasks;
+let estadoDeLaTaskIndividual = "";
+let idDeLaTask = "";
+//------------------------------------
+
+
 // ------- variables que uso en las funciones ---------
 let id = 0;
 let arrayFiltradoStatusPorEmpezar = [];
@@ -62,6 +69,12 @@ boton.addEventListener("click", ()=>{
 
         inputDescripcion.value = ""; //vacío el input
         inputDescripcion.focus();  // le sigo haciendo focus
+
+
+        //filtro todas las task por separado asi apenas se crea cada task, segun su estado ya pertenece a un array
+        filtrarStatusPorEmpezar();
+        filtrarStatusEnProceso();
+        filtrarStatusTerminadas();
     }
 })
 // -----------------------------------------------------------------------------------------------------------------------------
@@ -96,10 +109,7 @@ selectFiltroPorEstados.addEventListener("change", ()=>{
                 break;
     
             case estadoFiltroPorEmpezar:
-                arrayFiltradoStatusPorEmpezar = arrayDeTasks.filter(task => {
-                    return task.estado === statusPorEmpezar;
-                })
-                mostrarArray(arrayFiltradoStatusPorEmpezar);// muestro el array
+                mostrarArray(filtrarStatusPorEmpezar());// muestro el array que filtré
 
                 //-------- en caso de que cuando cambie el selector, si no tiene nada, muestro el warning-----
                 if (arrayFiltradoStatusPorEmpezar.length == 0) {                                            //
@@ -110,10 +120,7 @@ selectFiltroPorEstados.addEventListener("change", ()=>{
                 break;
     
             case estadoFiltroEnProceso:
-                arrayFiltradoStatusEnProceso = arrayDeTasks.filter(task => {
-                    return task.estado === statusEnProceso;
-                })
-                mostrarArray(arrayFiltradoStatusEnProceso);// muestro el array
+                mostrarArray(filtrarStatusEnProceso());// muestro el array
 
                 //-------- en caso de que cuando cambie el selector, si no tiene nada, muestro el warning-----
                 if (arrayFiltradoStatusEnProceso.length == 0) {                                             //
@@ -124,10 +131,7 @@ selectFiltroPorEstados.addEventListener("change", ()=>{
                 break;
     
             case estadoFiltroTerminadas:
-                arrayFiltradoStatusTerminadas = arrayDeTasks.filter(task => {
-                    return task.estado === statusTerminada;
-                })
-                mostrarArray(arrayFiltradoStatusTerminadas);// muestro el array
+                mostrarArray(filtrarStatusTerminadas());// muestro el array
 
                 //-------- en caso de que cuando cambie el selector, si no tiene nada, muestro el warning-----
                 if (arrayFiltradoStatusTerminadas.length == 0) {                                            //
@@ -143,6 +147,13 @@ selectFiltroPorEstados.addEventListener("change", ()=>{
     }
 })
 // -----------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
 
 
 
@@ -163,7 +174,7 @@ function mostrarArray(arrayRecibido) {
                                             <p class="texto-descriptivo">`+ elementoDelArray.descripcion + `</p>
                                             <div class="selector-estado-de-tarea">
                                                 <label for="estado-de-tarea">Estado:</label>
-                                                <select name="estado-de-tarea" id="estado-de-tarea">
+                                                <select name="estado-de-tarea" id="` + elementoDelArray.id + `" class="estado-de-tarea">
                                                     <option value="estado-por-empezar" selected>Por empezar</option>
                                                     <option value="estado-en-proceso">En proceso</option>
                                                     <option value="estado-terminada">Terminada</option>
@@ -183,7 +194,7 @@ function mostrarArray(arrayRecibido) {
                                                 <p class="texto-descriptivo">`+ elementoDelArray.descripcion + `</p>
                                                 <div class="selector-estado-de-tarea">
                                                     <label for="estado-de-tarea">Estado:</label>
-                                                    <select name="estado-de-tarea" id="estado-de-tarea">
+                                                    <select name="estado-de-tarea" id="` + elementoDelArray.id + `" class="estado-de-tarea">
                                                         <option value="estado-por-empezar">Por empezar</option>
                                                         <option value="estado-en-proceso" selected>En proceso</option>
                                                         <option value="estado-terminada">Terminada</option>
@@ -203,7 +214,7 @@ function mostrarArray(arrayRecibido) {
                                                 <p class="texto-descriptivo">`+ elementoDelArray.descripcion + `</p>
                                                 <div class="selector-estado-de-tarea">
                                                     <label for="estado-de-tarea">Estado:</label>
-                                                    <select name="estado-de-tarea" id="estado-de-tarea">
+                                                    <select name="estado-de-tarea" id="` + elementoDelArray.id + `" class="estado-de-tarea">
                                                         <option value="estado-por-empezar">Por empezar</option>
                                                         <option value="estado-en-proceso">En proceso</option>
                                                         <option value="estado-terminada" selected>Terminada</option>
@@ -215,6 +226,8 @@ function mostrarArray(arrayRecibido) {
                 }
             })
 
+
+// ------- ESCUCHADOR DE LOS BOTONES DE ELIMINNAR LA TASK ------------------------------------------------------
     botonesEliminarTask = document.querySelectorAll(".img-cruz")
 
     botonesEliminarTask.forEach(element => {
@@ -260,8 +273,130 @@ function mostrarArray(arrayRecibido) {
             })
         })
     });
+    // -----------------------------------------------------------------------------------------------------------
+
+
+
+    // --------------------------ESCUCHADOR DE LOS SELECTORES DE CADA TASK ---------------------------------------
+
+    selectoresTasks = document.querySelectorAll(".estado-de-tarea")
+    selectoresTasks.forEach(selector => {
+        selector.addEventListener("change", ()=>{
+
+            // el closest busca el padre mas cercano que tenga esa clase que le puse (puede ser x id tmb pero use una clase yo)
+            // solo busca hacia "arriba" en el DOM osea siempre los contenedores. Podria haber usado el parentNode pero tenia que
+            // usar varios concatenados hasta llegar al section, asiq asi es +limpio.
+            idDeLaTask = selector.closest(".task").id;
+
+            // busco el objeto en los arrays filtrados para eliminarlo de esos arrays
+            let objetoTaskEncontrada = buscarLaTaskEnTodosLosArrayYEliminarla(idDeLaTask);
+            console.log(objetoTaskEncontrada);
+
+            // y despues lo busco en el array original para cambiarle su estado asi cuando se vuelva a filtrar, lo haga con el 
+            // estado actualizado que le cambiamos
+            let taskParaSetearEstadoDelArrayOriginal = arrayDeTasks.find(element => element.id === objetoTaskEncontrada.id)
+            console.log(taskParaSetearEstadoDelArrayOriginal)
+
+            // segun a que hayamos cambiado el selector, se le va a cambiar el estado a la task
+            switch (selector.value) {
+                case "estado-por-empezar":
+                    taskParaSetearEstadoDelArrayOriginal.estado = statusPorEmpezar;
+                    console.log(taskParaSetearEstadoDelArrayOriginal)
+                    break;
+
+                case "estado-en-proceso":
+                    taskParaSetearEstadoDelArrayOriginal.estado = statusEnProceso;
+                    console.log(taskParaSetearEstadoDelArrayOriginal)
+                    break;
+
+                case "estado-terminada":
+                    taskParaSetearEstadoDelArrayOriginal.estado = statusTerminada;
+                    console.log(taskParaSetearEstadoDelArrayOriginal)
+                    break;
+            }
+        })
+    })
+    // -----------------------------------------------------------------------------------------------------------
+
 }
 
+
+function buscarLaTaskEnTodosLosArrayYEliminarla(idDeLaTaskABuscar) {
+    let taskEncontrada;
+    let indexDeLaTaskAEliminar;
+
+    if (arrayFiltradoStatusPorEmpezar.length != 0) {
+        taskEncontrada = arrayFiltradoStatusPorEmpezar.find(element => element.id === idDeLaTaskABuscar)
+
+        if (taskEncontrada != null) {
+            indexDeLaTaskAEliminar = arrayFiltradoStatusPorEmpezar.findIndex(element => element.id === idDeLaTaskABuscar)
+            arrayFiltradoStatusPorEmpezar.splice(indexDeLaTaskAEliminar,1)
+
+            if (selectFiltroPorEstados.value != estadoFiltroTodas) {
+                let sectionDeLaTask = document.getElementById(idDeLaTaskABuscar)
+
+                if (sectionDeLaTask) contenedorAllTask.removeChild(sectionDeLaTask)
+            }
+        }
+    }else if(arrayFiltradoStatusEnProceso.length != 0){
+        taskEncontrada = arrayFiltradoStatusEnProceso.find(element => element.id === idDeLaTaskABuscar)
+
+        if (taskEncontrada != null) {
+            indexDeLaTaskAEliminar = arrayFiltradoStatusEnProceso.findIndex(element => element.id === idDeLaTaskABuscar)
+            arrayFiltradoStatusEnProceso.splice(indexDeLaTaskAEliminar,1)
+
+            if (selectFiltroPorEstados.value != estadoFiltroTodas) {
+                let sectionDeLaTask = document.getElementById(idDeLaTaskABuscar)
+
+                if (sectionDeLaTask) contenedorAllTask.removeChild(sectionDeLaTask)
+            }
+        }
+    }else if(arrayFiltradoStatusTerminadas.length != 0){
+        taskEncontrada = arrayFiltradoStatusTerminadas.find(element => element.id === idDeLaTaskABuscar)
+
+        if (taskEncontrada != null) {
+            indexDeLaTaskAEliminar = arrayFiltradoStatusTerminadas.findIndex(element => element.id === idDeLaTaskABuscar)
+            arrayFiltradoStatusTerminadas.splice(indexDeLaTaskAEliminar,1)
+
+            if (selectFiltroPorEstados.value != estadoFiltroTodas) {
+                let sectionDeLaTask = document.getElementById(idDeLaTaskABuscar)
+
+                if (sectionDeLaTask) contenedorAllTask.removeChild(sectionDeLaTask)
+            }
+        }
+    }
+    return taskEncontrada;
+}
+
+
+
+
+
+
+
+
+// --------------------------- FUNCIONES DE FILTRADO ------------------------
+function filtrarStatusPorEmpezar() {
+    arrayFiltradoStatusPorEmpezar = arrayDeTasks.filter(task => {
+        return task.estado === statusPorEmpezar;
+    })
+    return arrayFiltradoStatusPorEmpezar;
+}
+
+function filtrarStatusEnProceso() {
+    arrayFiltradoStatusEnProceso = arrayDeTasks.filter(task => {
+        return task.estado === statusEnProceso;
+    })
+    return arrayFiltradoStatusEnProceso;
+}
+
+function filtrarStatusTerminadas() {
+    arrayFiltradoStatusTerminadas = arrayDeTasks.filter(task => {
+        return task.estado === statusTerminada;
+    })
+    return arrayFiltradoStatusTerminadas;
+}
+//-----------------------------------------------------------------------------
 
 
 function obtenerSiguienteId() {

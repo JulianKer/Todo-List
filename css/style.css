@@ -130,7 +130,7 @@ label{
 #status,
 #selector-filtro-estados,
 #selector-fecha,
-#estado-de-tarea{
+.estado-de-tarea{
     color: rgb(216, 216, 216);
 
     margin-left: 10px;
@@ -142,7 +142,7 @@ label{
 #status,
 #selector-filtro-estados,
 #selector-fecha,
-#estado-de-tarea{
+.estado-de-tarea{
     cursor: pointer;
 }
 
@@ -155,7 +155,7 @@ label{
 #status,
 #selector-filtro-estados,
 #selector-fecha,
-#estado-de-tarea{
+.estado-de-tarea{
     font-size: 1em;
     padding: 5px;
 }
@@ -164,7 +164,7 @@ label{
 #status:focus,
 #selector-filtro-estados:focus,
 #selector-fecha:focus,
-#estado-de-tarea:focus{
+.estado-de-tarea:focus{
     outline: none;
     border: solid 2px rgb(120, 120, 120);
 }
