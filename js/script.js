@@ -36,12 +36,14 @@ let statusTerminada = "status-terminada";
 //----------------------------------------------------
 
 
+// ------------------------------------------- AGREGAR UNA NUEVA TASK ------------------------------------------------------------
 boton.addEventListener("click", ()=>{
     
     if (inputDescripcion.value === "" || inputDescripcion.value === " ") {
         inputDescripcion.focus();
     }else{
         eliminarWarning(); // elimino el cartel de que no hay tareas pendientes
+        contenedorAllTask.innerHTML = ""; // vacio el contenedor de las tareas asi NO se duplican
 
         let descripcion = inputDescripcion.value; // agarro la descripcion
         let estado = selectEstadoNuevaTask.value;// agarro el estado
@@ -52,6 +54,9 @@ boton.addEventListener("click", ()=>{
             estado: estado
         };
 
+        //pongo que el filtro sea en "todas" asi se muestran todas primero por si es que estaba en alguna otra opcion
+        selectFiltroPorEstados.value = estadoFiltroTodas  // selectFiltroPorEstados.value = "filtro-todas"; 
+
         arrayDeTasks.push(nuevaTarea); // meto la task al array
         mostrarArray(arrayDeTasks); // muestro el array (en el html)
 
@@ -59,55 +64,91 @@ boton.addEventListener("click", ()=>{
         inputDescripcion.focus();  // le sigo haciendo focus
     }
 })
-// NOTA PARA EL JULIAN QUE SIGA MAÑANA ------------------------------>
+// -----------------------------------------------------------------------------------------------------------------------------
 
+
+
+//--------------------------------------------- SELECTOR DE FILTRO POR ESTADOS -------------------------------------------------
 selectFiltroPorEstados.addEventListener("change", ()=>{ 
+    // NOTA PARA EL JULIAN QUE SIGA MAÑANA
+
     // 1 --- tambien tengo que tener en cuenta de que el selector de la propia task, si estoy por ejemplo filtrando por empezar, 
     // al cambiar el selector de la task se debe borrar de donde se esta mostrando porque ya tiene otro estado
     // entonces si la cambio a en proceso, deberia verse ahora en el filtro de en proceso, 
 
     // 2---- y bueno, faltaria lo de el otro filtro que es el mas reciente
-    // 3---- tambien ver como hacer para que si filtro por empezar y no hay tareas por empezar pero si que hay de las otras, 
-    //       que se muestre el mensaje de wanring y asi con todas
+
+    contenedorAllTask.innerHTML = ""; // vacio el contenedor de las tareas asi NO se duplican
 
     let estadoDelSelector = selectFiltroPorEstados.value;
 
     if (arrayDeTasks.length != 0) {
         switch (estadoDelSelector) {
             case estadoFiltroTodas:
-                mostrarArray(arrayDeTasks);
+                mostrarArray(arrayDeTasks); // muestro el array
+
+                //-------- en caso de que cuando cambie el selector, si no tiene nada, muestro el warning-----
+                if (arrayDeTasks.length == 0) {
+                    contenedorAllTask.innerHTML= ""                                                         //
+                    mostrarWarning()                                                                        // 
+                }                                                                                           //
+                //--------------------------------------------------------------------------------------------
                 break;
     
             case estadoFiltroPorEmpezar:
                 arrayFiltradoStatusPorEmpezar = arrayDeTasks.filter(task => {
                     return task.estado === statusPorEmpezar;
                 })
-                mostrarArray(arrayFiltradoStatusPorEmpezar);
+                mostrarArray(arrayFiltradoStatusPorEmpezar);// muestro el array
+
+                //-------- en caso de que cuando cambie el selector, si no tiene nada, muestro el warning-----
+                if (arrayFiltradoStatusPorEmpezar.length == 0) {                                            //
+                    contenedorAllTask.innerHTML= ""                                                         //
+                    mostrarWarning()                                                                        //
+                }                                                                                           //
+                //--------------------------------------------------------------------------------------------
                 break;
     
             case estadoFiltroEnProceso:
                 arrayFiltradoStatusEnProceso = arrayDeTasks.filter(task => {
                     return task.estado === statusEnProceso;
                 })
-                mostrarArray(arrayFiltradoStatusEnProceso);
+                mostrarArray(arrayFiltradoStatusEnProceso);// muestro el array
+
+                //-------- en caso de que cuando cambie el selector, si no tiene nada, muestro el warning-----
+                if (arrayFiltradoStatusEnProceso.length == 0) {                                             //
+                    contenedorAllTask.innerHTML= ""                                                         //
+                    mostrarWarning()                                                                        //
+                }                                                                                           //
+                //--------------------------------------------------------------------------------------------
                 break;
     
             case estadoFiltroTerminadas:
                 arrayFiltradoStatusTerminadas = arrayDeTasks.filter(task => {
                     return task.estado === statusTerminada;
                 })
-                mostrarArray(arrayFiltradoStatusTerminadas);
+                mostrarArray(arrayFiltradoStatusTerminadas);// muestro el array
+
+                //-------- en caso de que cuando cambie el selector, si no tiene nada, muestro el warning-----
+                if (arrayFiltradoStatusTerminadas.length == 0) {                                            //
+                    contenedorAllTask.innerHTML= ""                                                         //
+                    mostrarWarning()                                                                        //
+                }                                                                                           //
+                //--------------------------------------------------------------------------------------------
                 break;
         }
+    }else{
+        eliminarWarning();
+        mostrarWarning();
     }
 })
+// -----------------------------------------------------------------------------------------------------------------------------
+
 
 
 
 // ---------------------- FUNCIONES ------------------------------
 function mostrarArray(arrayRecibido) { 
-
-    contenedorAllTask.innerHTML = ""; // vacio el contenedor de las tareas asi NO se duplican
 
     arrayRecibido.forEach(elementoDelArray =>{ // por cada task,
         switch (elementoDelArray.estado) {   // veo segun su estado para poner el "selected"
@@ -189,7 +230,7 @@ function mostrarArray(arrayRecibido) {
                     if (taskAEliminar != null) {
                         contenedorAllTask.removeChild(taskAEliminar); // lo remuevo del html
                         let indexAEliminar = arrayRecibido.findIndex(element => element.id === idDelElemento) // busco el index del elemento q quiero eliminar
-                        arrayRecibido.splice(indexAEliminar,1) // lo elimino del array
+                        arrayRecibido.splice(indexAEliminar,1) // lo remuevo del array
 
                         // este switch es para cuando elimino la task mientras esta filtrado, se elimine tambien del array original
                         // y asi cuando filtro a todas de nuevo, no se muestre la que elimine cuando apliqué otro filtro
@@ -209,10 +250,11 @@ function mostrarArray(arrayRecibido) {
                                 arrayDeTasks.splice(indexAEliminar,1)
                                 break;
                         }
-                        console.log("tamanio del array: " + arrayRecibido.length)
-                        if (arrayRecibido.length === 0) {
-                            mostrarWarning();
-                        }
+                        //--- si el array filtrado quedó vacío, muestro el warning-----
+                        if (arrayRecibido.length === 0) {                            //
+                            mostrarWarning()                                         //
+                        }                                                            //
+                        // ------------------------------------------------------------
                     }
                 }
             })
