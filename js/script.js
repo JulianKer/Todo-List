@@ -22,7 +22,7 @@ let botonesEliminarTask;
 // task -----------------------------
 let selectoresTasks;
 let estadoDeLaTaskIndividual = "";
-let idDeLaTask = "";
+// let idDeLaTask = "";
 //------------------------------------
 
 
@@ -279,121 +279,124 @@ function mostrarArray(arrayRecibido) {
 
     // --------------------------ESCUCHADOR DE LOS SELECTORES DE CADA TASK ---------------------------------------
 
+    // primero agarro todos los selectores de las task q hay
     selectoresTasks = document.querySelectorAll(".estado-de-tarea")
+
+    // por cada selector, le agrego un escuchador de cambio
     selectoresTasks.forEach(selector => {
-        selector.addEventListener("change", ()=>{
+    
+    // cuando cambie el selector
+    selector.addEventListener("change", ()=>{
+        // veo a que cambio
+        let nuevoEstado = selector.value;
+        console.log("nuevo estado ="+nuevoEstado)
 
-            // el closest busca el padre mas cercano que tenga esa clase que le puse (puede ser x id tmb pero use una clase yo)
-            // solo busca hacia "arriba" en el DOM osea siempre los contenedores. Podria haber usado el parentNode pero tenia que
-            // usar varios concatenados hasta llegar al section, asiq asi es +limpio.
-            idDeLaTask = selector.closest(".task").id;
+        // busco el contenedor mas cercano a este selector y obtengo el id de ese contenedor
+        let idDeLaTask = selector.closest(".task").id;
+        console.log(idDeLaTask)
 
-            // busco el objeto en los arrays filtrados para eliminarlo de esos arrays
-            let objetoTaskEncontrada = buscarLaTaskEnTodosLosArrayYEliminarla(idDeLaTask);
-            console.log(objetoTaskEncontrada);
+        // le cambio el estado a la task pasandole a QUÉ task se lo quiero cambiar y QUÉ estado ponerle
+        cambiarEstadoDeEstaTask(idDeLaTask, nuevoEstado);
 
-            // y despues lo busco en el array original para cambiarle su estado asi cuando se vuelva a filtrar, lo haga con el 
-            // estado actualizado que le cambiamos
-            let taskParaSetearEstadoDelArrayOriginal = arrayDeTasks.find(element => element.id === objetoTaskEncontrada.id)
-            console.log(taskParaSetearEstadoDelArrayOriginal)
+        // filtro el array original con cada estado para que se actualizen y la task que cambio de estado
+        // esté en el array que le corresponde (ademas de estar en el original "arrayDeTasks")
+        filtrarStatusPorEmpezar();
+        filtrarStatusEnProceso();
+        filtrarStatusTerminadas();
 
-            // segun a que hayamos cambiado el selector, se le va a cambiar el estado a la task
-            switch (selector.value) {
-                case "estado-por-empezar":
-                    taskParaSetearEstadoDelArrayOriginal.estado = statusPorEmpezar;
-                    console.log(taskParaSetearEstadoDelArrayOriginal)
-                    break;
+        // segun el filtro que este puesto a la hora de haber cambiado el estado, hago lo siguiente:
+        switch (selectFiltroPorEstados.value) {
 
-                case "estado-en-proceso":
-                    taskParaSetearEstadoDelArrayOriginal.estado = statusEnProceso;
-                    console.log(taskParaSetearEstadoDelArrayOriginal)
-                    break;
+            // si el filtro esta en "todas", veo el array original donde estan todas
+            case estadoFiltroTodas:
+                // si esta vacio, muestro el warning
+                if (arrayDeTasks.length === 0) {
+                    mostrarWarning();
+                }
+                break;
 
-                case "estado-terminada":
-                    taskParaSetearEstadoDelArrayOriginal.estado = statusTerminada;
-                    console.log(taskParaSetearEstadoDelArrayOriginal)
-                    break;
+            // si el filtro esta en "por empezar", veo el array filtrado por empezar 
+            case estadoFiltroPorEmpezar:
+                // si esta vacio, muestro el warning
+                if (arrayFiltradoStatusPorEmpezar.length === 0) {
+                    mostrarWarning();
+                }
+                break;
+
+            // si el filtro esta en "en proceso", veo el array de filtrado en proceso
+            case estadoFiltroEnProceso:
+                // si esta vacio, muestro el warning
+                if (arrayFiltradoStatusEnProceso.length === 0) {
+                    mostrarWarning();
+                }
+                break;
+
+            // si el filtro esta en "terminadas", veo el array filtrado terminadas
+            case estadoFiltroTerminadas:
+                // si esta vacio, muestro el warning
+                if (arrayFiltradoStatusTerminadas.length === 0) {
+                    mostrarWarning();
+                }
+                break;
             }
         })
     })
     // -----------------------------------------------------------------------------------------------------------
-
 }
 
 
-function buscarLaTaskEnTodosLosArrayYEliminarla(idDeLaTaskABuscar) {
-    let taskEncontrada;
-    let indexDeLaTaskAEliminar;
 
-    if (arrayFiltradoStatusPorEmpezar.length != 0) {
-        taskEncontrada = arrayFiltradoStatusPorEmpezar.find(element => element.id === idDeLaTaskABuscar)
 
-        if (taskEncontrada != null) {
-            indexDeLaTaskAEliminar = arrayFiltradoStatusPorEmpezar.findIndex(element => element.id === idDeLaTaskABuscar)
-            arrayFiltradoStatusPorEmpezar.splice(indexDeLaTaskAEliminar,1)
 
-            if (selectFiltroPorEstados.value != estadoFiltroTodas) {
-                let sectionDeLaTask = document.getElementById(idDeLaTaskABuscar)
 
-                if (sectionDeLaTask) contenedorAllTask.removeChild(sectionDeLaTask)
-            }
-        }
-    }else if(arrayFiltradoStatusEnProceso.length != 0){
-        taskEncontrada = arrayFiltradoStatusEnProceso.find(element => element.id === idDeLaTaskABuscar)
+// ------- FUNCION DE CAMBIO DE ESTADO DEL SELECTOR DE CADA TASK JUNTO A LA OBTENCION DEL ESTADO CORRESPONDIENTE SEGUN EL ELEGIDO ----------
+function cambiarEstadoDeEstaTask(idDeTaskACambiar, nuevoEstado) {
 
-        if (taskEncontrada != null) {
-            indexDeLaTaskAEliminar = arrayFiltradoStatusEnProceso.findIndex(element => element.id === idDeLaTaskABuscar)
-            arrayFiltradoStatusEnProceso.splice(indexDeLaTaskAEliminar,1)
+    // segun el id que me paso, busco una task con ese id en el array original
+    let taskEncontradaEnElArray = arrayDeTasks.find(element => element.id === idDeTaskACambiar);
+    console.log(taskEncontradaEnElArray)
 
-            if (selectFiltroPorEstados.value != estadoFiltroTodas) {
-                let sectionDeLaTask = document.getElementById(idDeLaTaskABuscar)
+    // si encontré una task con ese id, hago lo siguiente
+    if (taskEncontradaEnElArray) {
 
-                if (sectionDeLaTask) contenedorAllTask.removeChild(sectionDeLaTask)
-            }
-        }
-    }else if(arrayFiltradoStatusTerminadas.length != 0){
-        taskEncontrada = arrayFiltradoStatusTerminadas.find(element => element.id === idDeLaTaskABuscar)
+        // busco en QUË index está esa task
+        let index = arrayDeTasks.findIndex(element => element.id === idDeTaskACambiar)
+        console.log(index)
 
-        if (taskEncontrada != null) {
-            indexDeLaTaskAEliminar = arrayFiltradoStatusTerminadas.findIndex(element => element.id === idDeLaTaskABuscar)
-            arrayFiltradoStatusTerminadas.splice(indexDeLaTaskAEliminar,1)
+        console.log("viejo estado ="+arrayDeTasks[index].estado);
+        // segun el index, le cambio a ESA posicion, el estado obteniendolo con el replace() por que el estado que me viene es 
+        // el de "estado-..." y yo necesito el de "status-..."
+        arrayDeTasks[index].estado = nuevoEstado.replace("estado","status");
+        console.log("nuevo estado correspondiente= " + arrayDeTasks[index].estado);
 
-            if (selectFiltroPorEstados.value != estadoFiltroTodas) {
-                let sectionDeLaTask = document.getElementById(idDeLaTaskABuscar)
 
-                if (sectionDeLaTask) contenedorAllTask.removeChild(sectionDeLaTask)
-            }
+        // si al cambiar el estado, el filtro NO esta en "todas", la elimino del contenedor. esto lo hago porque por ejemplo:
+        // si estoy en el filtro "terminadas" y le cambio el estado a alguna task a "por empezar", ya NO deberia mostrarse ahí
+        // esa task, por ende la dejo de mostrar, PERO en el caso de que el filtro esté en "todas", no la elimino aunque le cambie
+        // el estado porque justamente estoy mostrando todas incluyendo TODOS los estados
+        if (selectFiltroPorEstados.value != estadoFiltroTodas) {
+            let sectionDeLaTask = document.getElementById(idDeTaskACambiar);
+            console.log(sectionDeLaTask);
+            if (sectionDeLaTask) contenedorAllTask.removeChild(sectionDeLaTask);
         }
     }
-    return taskEncontrada;
 }
 
-
-
-
-
-
-
+//----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // --------------------------- FUNCIONES DE FILTRADO ------------------------
 function filtrarStatusPorEmpezar() {
-    arrayFiltradoStatusPorEmpezar = arrayDeTasks.filter(task => {
-        return task.estado === statusPorEmpezar;
-    })
+    arrayFiltradoStatusPorEmpezar = arrayDeTasks.filter(task => task.estado === statusPorEmpezar)
     return arrayFiltradoStatusPorEmpezar;
 }
 
 function filtrarStatusEnProceso() {
-    arrayFiltradoStatusEnProceso = arrayDeTasks.filter(task => {
-        return task.estado === statusEnProceso;
-    })
+    arrayFiltradoStatusEnProceso = arrayDeTasks.filter(task => task.estado === statusEnProceso)
     return arrayFiltradoStatusEnProceso;
 }
 
 function filtrarStatusTerminadas() {
-    arrayFiltradoStatusTerminadas = arrayDeTasks.filter(task => {
-        return task.estado === statusTerminada;
-    })
+    arrayFiltradoStatusTerminadas = arrayDeTasks.filter(task => task.estado === statusTerminada)
     return arrayFiltradoStatusTerminadas;
 }
 //-----------------------------------------------------------------------------
