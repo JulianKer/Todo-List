@@ -7,6 +7,7 @@
   <li>Cambiar el estado de cada tarea.</li>
   <li>Eliminar tarea.</li>
   <li>Botón para volver arriba.</li>
+  <li>Advertencia de tareas pendientes.</li>
   <li>Responsive design</li>
 </ul>
 
