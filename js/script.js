@@ -1,7 +1,11 @@
 let mensajeWarning =  `<section class="warning-no-tasks" id="warning-no-tasks">
                     <img src="icon/fingerUp.svg" alt="finger-up" class="img-finger">
                     <h3 class="title-warning">¡No hay tareas pendientes!</h3>
-                </section>`
+                </section>`;
+
+let ancla = `<a href="#arriba" id="a-ancla"><img src="icon/flecha-up.svg" alt="Ir arriba" title="Ir arriba"></a>`;
+let sectionAncla = document.getElementById("ancla");
+
 // new task --------------------------
 let inputDescripcion = document.getElementById("description")
 let selectEstadoNuevaTask = document.getElementById("status");
@@ -247,6 +251,7 @@ selectFecha.addEventListener("change", ()=>{
 
 // ---------------------- FUNCIONES ------------------------------
 function mostrarArray(arrayRecibido) { 
+    saberSiHaceFaltaElAncla(arrayRecibido);
 
     arrayRecibido.forEach(elementoDelArray =>{ // por cada task,
         switch (elementoDelArray.estado) {   // veo segun su estado para poner el "selected"
@@ -355,6 +360,7 @@ function mostrarArray(arrayRecibido) {
                             mostrarWarning()                                         //
                         }                                                            //
                         // ------------------------------------------------------------
+                        saberSiHaceFaltaElAncla(arrayRecibido);
                     }
                 }
             })
@@ -405,6 +411,8 @@ function mostrarArray(arrayRecibido) {
                 // si esta vacio, muestro el warning
                 if (arrayFiltradoStatusPorEmpezar.length === 0) {
                     mostrarWarning();
+                }else{
+                    saberSiHaceFaltaElAncla(arrayFiltradoStatusPorEmpezar)
                 }
                 break;
 
@@ -413,6 +421,8 @@ function mostrarArray(arrayRecibido) {
                 // si esta vacio, muestro el warning
                 if (arrayFiltradoStatusEnProceso.length === 0) {
                     mostrarWarning();
+                }else{
+                    saberSiHaceFaltaElAncla(arrayFiltradoStatusEnProceso)
                 }
                 break;
 
@@ -421,6 +431,8 @@ function mostrarArray(arrayRecibido) {
                 // si esta vacio, muestro el warning
                 if (arrayFiltradoStatusTerminadas.length === 0) {
                     mostrarWarning();
+                }else{
+                    saberSiHaceFaltaElAncla(arrayFiltradoStatusTerminadas)
                 }
                 break;
             }
@@ -503,6 +515,19 @@ function comparadorDescendente(a,b) {
     return bSinLetras - aSinLetras;
 }
 //-------------------------------------------------------
+
+function saberSiHaceFaltaElAncla(array) {
+    let elementoAncla = document.getElementById("a-ancla");
+
+    if (array.length >= 3) {
+        sectionAncla.innerHTML = ancla;    
+    }else{
+        if (elementoAncla) {
+            sectionAncla.removeChild(elementoAncla);
+        }
+    }
+}
+
 
 function obtenerSiguienteId() {
     // para el siguiente id, hago un preincremento, osea, primero lo incremento en 1 y despues lo devuelvo
