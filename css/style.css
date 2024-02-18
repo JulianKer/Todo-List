@@ -216,7 +216,7 @@ button:active{
 .task:hover{
     background-color: rgb(50, 50, 50);
     border: rgb(255, 255, 0) solid 1px;
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
 
 .first-row,
