@@ -303,7 +303,7 @@ function mostrarArray(arrayRecibido) {
                                                 <img src="icon/cerrar.png" alt="Eliminar" title="Eliminar" class="img-cruz" id="`+ elementoDelArray.id +`">
                                             </div>
                                             <div class="second-row">
-                                                <p class="texto-descriptivo">`+ elementoDelArray.descripcion + `</p>
+                                                <p class="texto-descriptivo letra-tachada">`+ elementoDelArray.descripcion + `</p>
                                                 <div class="selector-estado-de-tarea">
                                                     <label for="estado-de-tarea">Estado:</label>
                                                     <select name="estado-de-tarea" id="` + elementoDelArray.id + `" class="estado-de-tarea">
@@ -337,24 +337,10 @@ function mostrarArray(arrayRecibido) {
                         let indexAEliminar = arrayRecibido.findIndex(element => element.id === idDelElemento) // busco el index del elemento q quiero eliminar
                         arrayRecibido.splice(indexAEliminar,1) // lo remuevo del array
 
-                        // este switch es para cuando elimino la task mientras esta filtrado, se elimine tambien del array original
-                        // y asi cuando filtro a todas de nuevo, no se muestre la que elimine cuando apliqué otro filtro
-                        switch (selectFiltroPorEstados.value) {
-                            case estadoFiltroPorEmpezar:
-                                indexAEliminar = arrayDeTasks.findIndex(element => element.id === idDelElemento)
-                                arrayDeTasks.splice(indexAEliminar,1)
-                                break;
+                        // aca elimino tambien la task del array original asi cuando filtramos de vuelta, no aparece
+                        indexAEliminar = arrayDeTasks.findIndex(element => element.id === idDelElemento)
+                        arrayDeTasks.splice(indexAEliminar,1);
 
-                            case estadoFiltroEnProceso:
-                                indexAEliminar = arrayDeTasks.findIndex(element => element.id === idDelElemento)
-                                arrayDeTasks.splice(indexAEliminar,1)
-                                break;
-
-                            case estadoFiltroTerminadas:
-                                indexAEliminar = arrayDeTasks.findIndex(element => element.id === idDelElemento)
-                                arrayDeTasks.splice(indexAEliminar,1)
-                                break;
-                        }
                         //--- si el array filtrado quedó vacío, muestro el warning-----
                         if (arrayRecibido.length === 0) {                            //
                             mostrarWarning()                                         //
@@ -384,11 +370,21 @@ function mostrarArray(arrayRecibido) {
         let nuevoEstado = selector.value;
 
         // busco el contenedor mas cercano a este selector y obtengo el id de ese contenedor
-        let idDeLaTask = selector.closest(".task").id;
+        let sectionDeLaTask = selector.closest(".task")
+        let idDeLaTask = sectionDeLaTask.id;
 
         // le cambio el estado a la task pasandole a QUÉ task se lo quiero cambiar y QUÉ estado ponerle
         cambiarEstadoDeEstaTask(idDeLaTask, nuevoEstado);
 
+        // obtengo el parrafo de ESA task para ver si le tengo que tachar la letra segun sea tarea terminada o no
+        let parrafoDescriptivoDeLaTask = sectionDeLaTask.querySelector(".texto-descriptivo")
+
+        if (nuevoEstado === "estado-terminada") {
+            parrafoDescriptivoDeLaTask.classList.add("letra-tachada")
+        }else{
+            parrafoDescriptivoDeLaTask.classList.remove("letra-tachada")
+        }
+        
         // filtro el array original con cada estado para que se actualizen y la task que cambio de estado
         // esté en el array que le corresponde (ademas de estar en el original "arrayDeTasks")
         filtrarStatusPorEmpezar();
