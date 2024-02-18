@@ -49,6 +49,29 @@ let statusEnProceso = "status-en-proceso";
 let statusTerminada = "status-terminada";
 //----------------------------------------------------
 
+//-------------------------------- Funcion para cuando dejas la ventana -----------------------------------------------
+
+// primero me guardo el titulo del documento --> "Todo-List"
+let titleDoc = document.title;
+
+// a la ventana le pongo un escuchar¿dor que cuando se le deja de hacer focus ("blur"), hace lo siguiente:
+window.addEventListener("blur", ()=>{
+
+    // filtro los array de por empezar y el de en proceso, si alguno NO esta vacio, le cambio el titulo al documento
+    // diciendo que vuelva porque hay tareas pendientes, ahora, si llegan a haber tareas pero que estan con el estado
+    // de terminadas, NO va a cambiar el titulo porque justamente, son tareas temrinadas y no pendientes 
+    if (filtrarStatusPorEmpezar().length != 0 || filtrarStatusEnProceso().length != 0) {
+        document.title = "¡Vuelve, Hay tareas pendientes!"
+    }
+})
+
+// tambien le agrego otro escuchador a la ventana que cuando se le haga focus, osea cuando estoy en la ventana, que me muestre
+// el titulo original del documento
+window.addEventListener("focus", ()=>{
+    document.title = titleDoc;
+})
+//---------------------------------------------------------------------------------------------------------------------
+
 
 // ------------------------------------------- AGREGAR UNA NUEVA TASK ------------------------------------------------------------
 boton.addEventListener("click", ()=>{
