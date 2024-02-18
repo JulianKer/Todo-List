@@ -11,6 +11,9 @@ let boton = document.getElementById("boton");
 // filter ----------------------------
 let selectFiltroPorEstados = document.getElementById("selector-filtro-estados")
 let selectFecha = document.getElementById("selector-fecha");
+let estadoDelSelector;
+let estadoDelSelectorFechas;
+let arrayAMostrar = [];
 //------------------------------------
 
 // all task --------------------------
@@ -83,63 +86,77 @@ boton.addEventListener("click", ()=>{
 
 //--------------------------------------------- SELECTOR DE FILTRO POR ESTADOS -------------------------------------------------
 selectFiltroPorEstados.addEventListener("change", ()=>{ 
-    // NOTA PARA EL JULIAN QUE SIGA MAÑANA
 
-    // 1 --- tambien tengo que tener en cuenta de que el selector de la propia task, si estoy por ejemplo filtrando por empezar, 
-    // al cambiar el selector de la task se debe borrar de donde se esta mostrando porque ya tiene otro estado
-    // entonces si la cambio a en proceso, deberia verse ahora en el filtro de en proceso, 
-
+    estadoDelSelector = selectFiltroPorEstados.value;
+    estadoDelSelectorFechas = selectFecha.value;
     // 2---- y bueno, faltaria lo de el otro filtro que es el mas reciente
 
     contenedorAllTask.innerHTML = ""; // vacio el contenedor de las tareas asi NO se duplican
 
-    let estadoDelSelector = selectFiltroPorEstados.value;
-
     if (arrayDeTasks.length != 0) {
+
         switch (estadoDelSelector) {
             case estadoFiltroTodas:
-                mostrarArray(arrayDeTasks); // muestro el array
 
-                //-------- en caso de que cuando cambie el selector, si no tiene nada, muestro el warning-----
-                if (arrayDeTasks.length == 0) {
-                    contenedorAllTask.innerHTML= ""                                                         //
-                    mostrarWarning()                                                                        // 
-                }                                                                                           //
-                //--------------------------------------------------------------------------------------------
+                switch (estadoDelSelectorFechas) {
+                    case "ordenar-recientemente":
+                        // le paso el comparador SIN los parentesis porque no quiero que se ejecute primero esa funcion.
+                        arrayAMostrar = arrayDeTasks.slice().sort(comparadorAscendente)
+                        break;
+                    case "ordenar-antiguamente":
+                        // le paso el comparador SIN los parentesis porque no quiero que se ejecute primero esa funcion.
+                        arrayAMostrar = arrayDeTasks.slice().sort(comparadorDescendente)
+                        break;
+                }
+                mostrarArray(arrayAMostrar); // muestro el array que filtré
                 break;
     
             case estadoFiltroPorEmpezar:
-                mostrarArray(filtrarStatusPorEmpezar());// muestro el array que filtré
-
-                //-------- en caso de que cuando cambie el selector, si no tiene nada, muestro el warning-----
-                if (arrayFiltradoStatusPorEmpezar.length == 0) {                                            //
-                    contenedorAllTask.innerHTML= ""                                                         //
-                    mostrarWarning()                                                                        //
-                }                                                                                           //
-                //--------------------------------------------------------------------------------------------
+                switch (estadoDelSelectorFechas) {
+                    case "ordenar-recientemente":
+                        // le paso el comparador SIN los parentesis porque no quiero que se ejecute primero esa funcion.
+                        arrayAMostrar = filtrarStatusPorEmpezar().slice().sort(comparadorAscendente)
+                        break;
+                    case "ordenar-antiguamente":
+                        // le paso el comparador SIN los parentesis porque no quiero que se ejecute primero esa funcion.
+                        arrayAMostrar = filtrarStatusPorEmpezar().slice().sort(comparadorDescendente)
+                        break;
+                }
+                mostrarArray(arrayAMostrar);// muestro el array que filtré
                 break;
     
             case estadoFiltroEnProceso:
-                mostrarArray(filtrarStatusEnProceso());// muestro el array
-
-                //-------- en caso de que cuando cambie el selector, si no tiene nada, muestro el warning-----
-                if (arrayFiltradoStatusEnProceso.length == 0) {                                             //
-                    contenedorAllTask.innerHTML= ""                                                         //
-                    mostrarWarning()                                                                        //
-                }                                                                                           //
-                //--------------------------------------------------------------------------------------------
+                switch (estadoDelSelectorFechas) {
+                    case "ordenar-recientemente":
+                        // le paso el comparador SIN los parentesis porque no quiero que se ejecute primero esa funcion.
+                        arrayAMostrar = filtrarStatusEnProceso().slice().sort(comparadorAscendente)
+                        break;
+                    case "ordenar-antiguamente":
+                        // le paso el comparador SIN los parentesis porque no quiero que se ejecute primero esa funcion.
+                        arrayAMostrar = filtrarStatusEnProceso().slice().sort(comparadorDescendente)
+                        break;
+                }
+                mostrarArray(arrayAMostrar);// muestro el array que filtré
                 break;
     
             case estadoFiltroTerminadas:
-                mostrarArray(filtrarStatusTerminadas());// muestro el array
-
-                //-------- en caso de que cuando cambie el selector, si no tiene nada, muestro el warning-----
-                if (arrayFiltradoStatusTerminadas.length == 0) {                                            //
-                    contenedorAllTask.innerHTML= ""                                                         //
-                    mostrarWarning()                                                                        //
-                }                                                                                           //
-                //--------------------------------------------------------------------------------------------
+                switch (estadoDelSelectorFechas) {
+                    case "ordenar-recientemente":
+                        // le paso el comparador SIN los parentesis porque no quiero que se ejecute primero esa funcion.
+                        arrayAMostrar = filtrarStatusTerminadas().slice().sort(comparadorAscendente)
+                        break;
+                    case "ordenar-antiguamente":
+                        // le paso el comparador SIN los parentesis porque no quiero que se ejecute primero esa funcion.
+                        arrayAMostrar = filtrarStatusTerminadas().slice().sort(comparadorDescendente)
+                        break;
+                }
+                mostrarArray(arrayAMostrar);// muestro el array que filtré
                 break;
+        }
+
+        // aca me fijo que si despues de TOOODOS los filtros, si el contenedor que estoy mostrando quedo vacío, muestro el warning
+        if (contenedorAllTask.innerHTML.trim() === "") {
+            mostrarWarning();
         }
     }else{
         eliminarWarning();
@@ -148,15 +165,85 @@ selectFiltroPorEstados.addEventListener("change", ()=>{
 })
 // -----------------------------------------------------------------------------------------------------------------------------
 
+//--------------------------------------------- SELECTOR DE FILTRO POR AGREGADO -------------------------------------------------
+selectFecha.addEventListener("change", ()=>{
+    estadoDelSelector = selectFiltroPorEstados.value;
+    estadoDelSelectorFechas = selectFecha.value;
 
+    contenedorAllTask.innerHTML = ""; // vacio el contenedor de las tareas asi NO se duplican
 
+    if (arrayDeTasks.length != 0) {
 
+        switch (estadoDelSelector) {
+            case estadoFiltroTodas:
+                switch (estadoDelSelectorFechas) {
+                    case "ordenar-recientemente":
 
+                        // le paso el comparador SIN los parentesis porque no quiero que se ejecute primero esa funcion.
+                        arrayAMostrar = arrayDeTasks.slice().sort(comparadorAscendente)
+                        break;
+                    case "ordenar-antiguamente":
 
+                        // le paso el comparador SIN los parentesis porque no quiero que se ejecute primero esa funcion.
+                        arrayAMostrar = arrayDeTasks.slice().sort(comparadorDescendente)
+                        break;
+                }
+                mostrarArray(arrayAMostrar); // muestro el array que filtré
+                break;
+    
+            case estadoFiltroPorEmpezar:
+                switch (estadoDelSelectorFechas) {
+                    case "ordenar-recientemente":
+                        // le paso el comparador SIN los parentesis porque no quiero que se ejecute primero esa funcion.
+                        arrayAMostrar = filtrarStatusPorEmpezar().slice().sort(comparadorAscendente)
+                        break;
+                    case "ordenar-antiguamente":
+                        // le paso el comparador SIN los parentesis porque no quiero que se ejecute primero esa funcion.
+                        arrayAMostrar = filtrarStatusPorEmpezar().slice().sort(comparadorDescendente)
+                        break;
+                }
+                mostrarArray(arrayAMostrar);// muestro el array que filtré
+                break;
+    
+            case estadoFiltroEnProceso:
+                switch (estadoDelSelectorFechas) {
+                    case "ordenar-recientemente":
+                        // le paso el comparador SIN los parentesis porque no quiero que se ejecute primero esa funcion.
+                        arrayAMostrar = filtrarStatusEnProceso().slice().sort(comparadorAscendente)
+                        break;
+                    case "ordenar-antiguamente":
+                        // le paso el comparador SIN los parentesis porque no quiero que se ejecute primero esa funcion.
+                        arrayAMostrar = filtrarStatusEnProceso().slice().sort(comparadorDescendente)
+                        break;
+                }
+                mostrarArray(arrayAMostrar);// muestro el array que filtré
+                break;
+    
+            case estadoFiltroTerminadas:
+                switch (estadoDelSelectorFechas) {
+                    case "ordenar-recientemente":
+                        // le paso el comparador SIN los parentesis porque no quiero que se ejecute primero esa funcion.
+                        arrayAMostrar = filtrarStatusTerminadas().slice().sort(comparadorAscendente)
+                        break;
+                    case "ordenar-antiguamente":
+                        // le paso el comparador SIN los parentesis porque no quiero que se ejecute primero esa funcion.
+                        arrayAMostrar = filtrarStatusTerminadas().slice().sort(comparadorDescendente)
+                        break;
+                }
+                mostrarArray(arrayAMostrar);// muestro el array que filtré
+                break;
+        }
 
-
-
-
+        // aca me fijo que si despues de TOOODOS los filtros, si el contenedor que estoy mostrando quedo vacío, muestro el warning
+        if (contenedorAllTask.innerHTML.trim() === "") {
+            mostrarWarning();
+        }
+    }else{
+        eliminarWarning();
+        mostrarWarning();
+    }
+})
+// -----------------------------------------------------------------------------------------------------------------------------
 
 // ---------------------- FUNCIONES ------------------------------
 function mostrarArray(arrayRecibido) { 
@@ -289,11 +376,9 @@ function mostrarArray(arrayRecibido) {
     selector.addEventListener("change", ()=>{
         // veo a que cambio
         let nuevoEstado = selector.value;
-        console.log("nuevo estado ="+nuevoEstado)
 
         // busco el contenedor mas cercano a este selector y obtengo el id de ese contenedor
         let idDeLaTask = selector.closest(".task").id;
-        console.log(idDeLaTask)
 
         // le cambio el estado a la task pasandole a QUÉ task se lo quiero cambiar y QUÉ estado ponerle
         cambiarEstadoDeEstaTask(idDeLaTask, nuevoEstado);
@@ -354,21 +439,16 @@ function cambiarEstadoDeEstaTask(idDeTaskACambiar, nuevoEstado) {
 
     // segun el id que me paso, busco una task con ese id en el array original
     let taskEncontradaEnElArray = arrayDeTasks.find(element => element.id === idDeTaskACambiar);
-    console.log(taskEncontradaEnElArray)
 
     // si encontré una task con ese id, hago lo siguiente
     if (taskEncontradaEnElArray) {
 
         // busco en QUË index está esa task
         let index = arrayDeTasks.findIndex(element => element.id === idDeTaskACambiar)
-        console.log(index)
 
-        console.log("viejo estado ="+arrayDeTasks[index].estado);
         // segun el index, le cambio a ESA posicion, el estado obteniendolo con el replace() por que el estado que me viene es 
         // el de "estado-..." y yo necesito el de "status-..."
         arrayDeTasks[index].estado = nuevoEstado.replace("estado","status");
-        console.log("nuevo estado correspondiente= " + arrayDeTasks[index].estado);
-
 
         // si al cambiar el estado, el filtro NO esta en "todas", la elimino del contenedor. esto lo hago porque por ejemplo:
         // si estoy en el filtro "terminadas" y le cambio el estado a alguna task a "por empezar", ya NO deberia mostrarse ahí
@@ -376,7 +456,6 @@ function cambiarEstadoDeEstaTask(idDeTaskACambiar, nuevoEstado) {
         // el estado porque justamente estoy mostrando todas incluyendo TODOS los estados
         if (selectFiltroPorEstados.value != estadoFiltroTodas) {
             let sectionDeLaTask = document.getElementById(idDeTaskACambiar);
-            console.log(sectionDeLaTask);
             if (sectionDeLaTask) contenedorAllTask.removeChild(sectionDeLaTask);
         }
     }
@@ -402,17 +481,44 @@ function filtrarStatusTerminadas() {
 //-----------------------------------------------------------------------------
 
 
+// --------------- COMPARADORES --------------------------
+function comparadorAscendente(a,b) {
+    // primero separo los id de los obejtos q me pasan con el metodo split porq yo se que el id es x ej: "tarea-1", entonces los 
+    // separo por el guin medio "-" y me quedo con la segunda parte de ese array que me da, osea, me quedo con el numero
+    let aSinLetras = a.id.split("-")[1];
+    // lo mismo con este
+    let bSinLetras = b.id.split("-")[1];
+    
+    // y despues los resto para ver si me da -1 0 +1
+    return aSinLetras - bSinLetras;
+}
+function comparadorDescendente(a,b) {
+    // primero separo los id de los obejtos q me pasan con el metodo split porq yo se que el id es x ej: "tarea-1", entonces los 
+    // separo por el guin medio "-" y me quedo con la segunda parte de ese array que me da, osea, me quedo con el numero
+    let aSinLetras = a.id.split("-")[1];
+    // lo mismo con este
+    let bSinLetras = b.id.split("-")[1]; 
+
+    // y despues los resto para ver si me da -1 0 +1
+    return bSinLetras - aSinLetras;
+}
+//-------------------------------------------------------
+
 function obtenerSiguienteId() {
+    // para el siguiente id, hago un preincremento, osea, primero lo incremento en 1 y despues lo devuelvo
     return (++id);
 }
 
 function eliminarWarning(){
+    // busco el contenedor de warning por su id
     let sectionWarning = document.getElementById("warning-no-tasks");
+    // si está, lo elimino
     if (sectionWarning) {
         contenedorAllTask.removeChild(sectionWarning);
     }
 }
 
 function mostrarWarning() {
+    // le agrego al contenedor el mensaje
     contenedorAllTask.innerHTML += mensajeWarning;
 }
